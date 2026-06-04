@@ -17,6 +17,7 @@ return new class extends Migration
         $table->foreignId('customer_id')->constrained()->onDelete('cascade');
         $table->decimal('total_amount', 15, 2)->default(0);
         $table->timestamps();
+        $table->softDeletes(); // این متد ستون deleted_at را برای حذف نرم به جدول اضافه می‌کند
     });
 }
 

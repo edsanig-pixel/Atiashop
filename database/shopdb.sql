@@ -26,14 +26,13 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `level` enum('root','group','general','subsidiary') NOT NULL DEFAULT 'subsidiary' COMMENT 'سطح حساب: ریشه(۱رقم)، گروه(۲رقم)، کل(۴رقم)، معین(۶رقم)',
   `code` char(6) NOT NULL COMMENT 'کد حساب با طول ثابت ۶ رقم - صفرهای پیشرو الزامی',
   `title` varchar(255) NOT NULL,
-  `nature` enum('debtor','creditor') NOT NULL,
+  `nature` enum('debtor','creditor') NOT NULL COMMENT 'ماهیت حساب: بدهکار یا بستانکار',
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `accounts_code_unique` (`code`),
   KEY `accounts_parent_id_foreign` (`parent_id`),
-  CONSTRAINT `accounts_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `accounts` (`id`)
+  CONSTRAINT `accounts_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shopdb.accounts: ~0 rows (approximately)
@@ -57,44 +56,13 @@ CREATE TABLE IF NOT EXISTS `activity_log` (
   KEY `subject` (`subject_type`,`subject_id`),
   KEY `causer` (`causer_type`,`causer_id`),
   KEY `activity_log_log_name_index` (`log_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.activity_log: ~26 rows (approximately)
+-- Dumping data for table shopdb.activity_log: ~2 rows (approximately)
 DELETE FROM `activity_log`;
 INSERT INTO `activity_log` (`id`, `log_name`, `description`, `subject_type`, `event`, `subject_id`, `causer_type`, `causer_id`, `properties`, `batch_uuid`, `created_at`, `updated_at`) VALUES
-	(1, 'user_management', 'created', 'App\\Models\\User', 'created', 1, NULL, NULL, '{"attributes":{"name":"\\u0645\\u062f\\u06cc\\u0631 \\u0633\\u06cc\\u0633\\u062a\\u0645","email":"edsanig@gmail.com"}}', NULL, '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(2, 'product', 'created', 'App\\Models\\Product', 'created', 1, 'App\\Models\\User', 1, '{"attributes":{"id":1,"category_id":2,"name":"\\u062a\\u0633\\u062a \\u0645\\u062d\\u0635\\u0648\\u0644","sku":"010100001","purchase_price":"232.00","sale_price":"2311.00","stock":111,"created_at":"2026-02-22T21:55:10.000000Z","updated_at":"2026-02-22T21:55:10.000000Z"}}', NULL, '2026-02-22 18:25:10', '2026-02-22 18:25:10'),
-	(3, 'product', 'updated', 'App\\Models\\Product', 'updated', 1, 'App\\Models\\User', 1, '{"attributes":{"updated_at":"2026-02-22T21:55:30.000000Z"},"old":{"updated_at":"2026-02-22T21:55:10.000000Z"}}', NULL, '2026-02-22 18:25:30', '2026-02-22 18:25:30'),
-	(4, 'product', 'created', 'App\\Models\\Product', 'created', 2, 'App\\Models\\User', 1, '{"attributes":{"id":2,"category_id":4,"name":"\\u0628\\u0633\\u0628\\u0628\\u0628","sku":"020100001","purchase_price":"4.00","sale_price":"5.00","stock":6,"created_at":"2026-02-26T00:29:17.000000Z","updated_at":"2026-02-26T00:29:17.000000Z"}}', NULL, '2026-02-25 20:59:17', '2026-02-25 20:59:17'),
-	(5, 'product', 'created', 'App\\Models\\Product', 'created', 3, 'App\\Models\\User', 1, '{"attributes":{"id":3,"category_id":2,"name":"\\u0631\\u0698 \\u0644\\u0628 \\u0645\\u0627\\u062a \\u0648\\u06cc\\u0648\\u0644\\u062a","sku":"010100002","purchase_price":"156666.00","sale_price":"165555.00","stock":12,"created_at":"2026-02-28T21:23:05.000000Z","updated_at":"2026-02-28T21:23:05.000000Z"}}', NULL, '2026-02-28 17:53:05', '2026-02-28 17:53:05'),
-	(6, 'product', 'created', 'App\\Models\\Product', 'created', 4, 'App\\Models\\User', 1, '{"attributes":{"id":4,"category_id":5,"name":"jkkjj","sku":"010100001","purchase_price":"11.00","sale_price":"8.00","stock":5,"created_at":"2026-03-02T09:17:25.000000Z","updated_at":"2026-03-02T09:17:25.000000Z","unit_id":3}}', NULL, '2026-03-02 05:47:25', '2026-03-02 05:47:25'),
-	(7, 'product', 'created', 'App\\Models\\Product', 'created', 5, 'App\\Models\\User', 1, '{"attributes":{"id":5,"category_id":4,"name":"hkasd","sku":"020100002","purchase_price":"23232.00","sale_price":"23223.00","stock":222,"created_at":"2026-03-02T18:36:59.000000Z","updated_at":"2026-03-02T18:36:59.000000Z","unit_id":4}}', NULL, '2026-03-02 15:06:59', '2026-03-02 15:06:59'),
-	(8, 'product', 'created', 'App\\Models\\Product', 'created', 6, 'App\\Models\\User', 1, '{"attributes":{"id":6,"category_id":4,"name":"\\u062a\\u0633\\u062a \\u062a\\u0633\\u062a\\u0633","sku":"020100003","purchase_price":"2323232.00","sale_price":"23232321.00","stock":222,"created_at":"2026-03-04T09:01:37.000000Z","updated_at":"2026-03-04T09:01:37.000000Z","unit_id":3}}', NULL, '2026-03-04 05:31:37', '2026-03-04 05:31:37'),
-	(9, 'product', 'created', 'App\\Models\\Product', 'created', 7, 'App\\Models\\User', 1, '{"attributes":{"id":7,"category_id":9,"name":"\\u062a\\u0633\\u062a \\u0632\\u06cc\\u0631 \\u0645\\u062c\\u0645\\u0648\\u0639\\u0647 4","sku":"030300001","purchase_price":"4333333.00","sale_price":"87777777.00","stock":10,"created_at":"2026-05-07T12:19:29.000000Z","updated_at":"2026-05-07T12:19:29.000000Z","unit_id":3}}', NULL, '2026-05-07 08:49:29', '2026-05-07 08:49:29'),
-	(10, 'product', 'updated', 'App\\Models\\Product', 'updated', 5, 'App\\Models\\User', 1, '{"attributes":{"stock":72,"updated_at":"2026-05-07T21:46:58.000000Z"},"old":{"stock":222,"updated_at":"2026-03-02T18:36:59.000000Z"}}', NULL, '2026-05-07 18:16:58', '2026-05-07 18:16:58'),
-	(11, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":216,"updated_at":"2026-05-07T21:47:50.000000Z"},"old":{"stock":222,"updated_at":"2026-03-04T09:01:37.000000Z"}}', NULL, '2026-05-07 18:17:50', '2026-05-07 18:17:50'),
-	(12, 'product', 'updated', 'App\\Models\\Product', 'updated', 4, 'App\\Models\\User', 1, '{"attributes":{"stock":3,"updated_at":"2026-05-07T21:49:50.000000Z"},"old":{"stock":5,"updated_at":"2026-03-02T09:17:25.000000Z"}}', NULL, '2026-05-07 18:19:50', '2026-05-07 18:19:50'),
-	(13, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":212,"updated_at":"2026-05-08T11:40:25.000000Z"},"old":{"stock":216,"updated_at":"2026-05-07T21:47:50.000000Z"}}', NULL, '2026-05-08 08:10:25', '2026-05-08 08:10:25'),
-	(14, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":205,"updated_at":"2026-05-08T11:43:30.000000Z"},"old":{"stock":212,"updated_at":"2026-05-08T11:40:25.000000Z"}}', NULL, '2026-05-08 08:13:30', '2026-05-08 08:13:30'),
-	(15, 'product', 'updated', 'App\\Models\\Product', 'updated', 5, 'App\\Models\\User', 1, '{"attributes":{"stock":67,"updated_at":"2026-05-08T11:43:30.000000Z"},"old":{"stock":72,"updated_at":"2026-05-07T21:46:58.000000Z"}}', NULL, '2026-05-08 08:13:30', '2026-05-08 08:13:30'),
-	(16, 'product', 'updated', 'App\\Models\\Product', 'updated', 5, 'App\\Models\\User', 1, '{"attributes":{"stock":60},"old":{"stock":67}}', NULL, '2026-05-08 08:13:30', '2026-05-08 08:13:30'),
-	(19, 'product', 'updated', 'App\\Models\\Product', 'updated', 5, 'App\\Models\\User', 1, '{"attributes":{"stock":59,"updated_at":"2026-05-08T15:39:11.000000Z"},"old":{"stock":60,"updated_at":"2026-05-08T11:43:30.000000Z"}}', NULL, '2026-05-08 12:09:11', '2026-05-08 12:09:11'),
-	(20, 'product', 'updated', 'App\\Models\\Product', 'updated', 2, 'App\\Models\\User', 1, '{"attributes":{"stock":5,"updated_at":"2026-05-08T15:39:11.000000Z"},"old":{"stock":6,"updated_at":"2026-02-26T00:29:17.000000Z"}}', NULL, '2026-05-08 12:09:11', '2026-05-08 12:09:11'),
-	(21, 'product', 'updated', 'App\\Models\\Product', 'updated', 2, 'App\\Models\\User', 1, '{"attributes":{"stock":4},"old":{"stock":5}}', NULL, '2026-05-08 12:09:11', '2026-05-08 12:09:11'),
-	(22, 'product', 'updated', 'App\\Models\\Product', 'updated', 5, 'App\\Models\\User', 1, '{"attributes":{"stock":60,"updated_at":"2026-05-08T15:39:27.000000Z"},"old":{"stock":59,"updated_at":"2026-05-08T15:39:11.000000Z"}}', NULL, '2026-05-08 12:09:27', '2026-05-08 12:09:27'),
-	(23, 'product', 'updated', 'App\\Models\\Product', 'updated', 2, 'App\\Models\\User', 1, '{"attributes":{"stock":5,"updated_at":"2026-05-08T15:39:27.000000Z"},"old":{"stock":4,"updated_at":"2026-05-08T15:39:11.000000Z"}}', NULL, '2026-05-08 12:09:27', '2026-05-08 12:09:27'),
-	(24, 'product', 'updated', 'App\\Models\\Product', 'updated', 2, 'App\\Models\\User', 1, '{"attributes":{"stock":6},"old":{"stock":5}}', NULL, '2026-05-08 12:09:27', '2026-05-08 12:09:27'),
-	(25, 'product', 'updated', 'App\\Models\\Product', 'updated', 5, 'App\\Models\\User', 1, '{"attributes":{"stock":59,"updated_at":"2026-05-08T15:50:33.000000Z"},"old":{"stock":60,"updated_at":"2026-05-08T15:39:27.000000Z"}}', NULL, '2026-05-08 12:20:33', '2026-05-08 12:20:33'),
-	(26, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":185,"updated_at":"2026-05-08T16:13:47.000000Z"},"old":{"stock":205,"updated_at":"2026-05-08T11:43:30.000000Z"}}', NULL, '2026-05-08 12:43:47', '2026-05-08 12:43:47'),
-	(27, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":175,"updated_at":"2026-05-08T16:32:50.000000Z"},"old":{"stock":185,"updated_at":"2026-05-08T16:13:47.000000Z"}}', NULL, '2026-05-08 13:02:50', '2026-05-08 13:02:50'),
-	(28, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":140,"updated_at":"2026-05-08T16:58:17.000000Z"},"old":{"stock":175,"updated_at":"2026-05-08T16:32:50.000000Z"}}', NULL, '2026-05-08 13:28:17', '2026-05-08 13:28:17'),
-	(29, 'product', 'updated', 'App\\Models\\Product', 'updated', 7, 'App\\Models\\User', 1, '{"attributes":{"stock":9,"updated_at":"2026-05-08T16:59:30.000000Z"},"old":{"stock":10,"updated_at":"2026-05-07T12:19:29.000000Z"}}', NULL, '2026-05-08 13:29:30', '2026-05-08 13:29:30'),
-	(30, 'product', 'updated', 'App\\Models\\Product', 'updated', 2, 'App\\Models\\User', 1, '{"attributes":{"stock":3,"updated_at":"2026-05-08T18:16:31.000000Z"},"old":{"stock":6,"updated_at":"2026-05-08T15:39:27.000000Z"}}', NULL, '2026-05-08 14:46:31', '2026-05-08 14:46:31'),
-	(31, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":130,"updated_at":"2026-05-15T19:01:35.000000Z"},"old":{"stock":140,"updated_at":"2026-05-08T16:58:17.000000Z"}}', NULL, '2026-05-15 15:31:36', '2026-05-15 15:31:36'),
-	(32, 'user_management', 'updated', 'App\\Models\\User', 'updated', 1, 'App\\Models\\User', 1, '{"attributes":{"name":"\\u0627\\u062d\\u0633\\u0627\\u0646 \\u062f\\u0647\\u0642\\u0627\\u0646\\u06cc"},"old":{"name":"\\u0645\\u062f\\u06cc\\u0631 \\u0633\\u06cc\\u0633\\u062a\\u0645"}}', NULL, '2026-05-15 15:36:32', '2026-05-15 15:36:32'),
-	(33, 'product', 'updated', 'App\\Models\\Product', 'updated', 4, 'App\\Models\\User', 1, '{"attributes":{"stock":0,"updated_at":"2026-05-20T20:22:24.000000Z"},"old":{"stock":3,"updated_at":"2026-05-07T21:49:50.000000Z"}}', NULL, '2026-05-20 16:52:24', '2026-05-20 16:52:24'),
-	(34, 'product', 'updated', 'App\\Models\\Product', 'updated', 6, 'App\\Models\\User', 1, '{"attributes":{"stock":100,"updated_at":"2026-05-20T21:09:35.000000Z"},"old":{"stock":130,"updated_at":"2026-05-15T19:01:35.000000Z"}}', NULL, '2026-05-20 17:39:35', '2026-05-20 17:39:35'),
-	(35, 'product', 'updated', 'App\\Models\\Product', 'updated', 5, 'App\\Models\\User', 1, '{"attributes":{"stock":52,"updated_at":"2026-05-24T19:31:33.000000Z"},"old":{"stock":59,"updated_at":"2026-05-08T15:50:33.000000Z"}}', NULL, '2026-05-24 16:01:33', '2026-05-24 16:01:33');
+	(1, 'user_management', 'created', 'App\\Models\\User', 'created', 1, NULL, NULL, '{"attributes":{"name":"\\u0645\\u062f\\u06cc\\u0631 \\u0633\\u06cc\\u0633\\u062a\\u0645","email":"edsanig@gmail.com"}}', NULL, '2026-06-01 17:05:55', '2026-06-01 17:05:55'),
+	(2, 'product', 'created', 'App\\Models\\Product', 'created', 1, 'App\\Models\\User', 1, '{"attributes":{"id":1,"category_id":2,"name":"\\u0631\\u0698 \\u0644\\u0628 \\u0645\\u0627\\u06cc\\u0639 \\u0648\\u06cc\\u0648\\u0644\\u062a \\u0642\\u0631\\u0645\\u0632 02","sku":"010100001","purchase_price":"30000.00","sale_price":"45000.00","stock":5,"is_active":1,"created_at":"2026-06-01T21:15:20.000000Z","updated_at":"2026-06-01T21:15:20.000000Z","unit_id":1}}', NULL, '2026-06-01 17:45:20', '2026-06-01 17:45:20');
 
 -- Dumping structure for table shopdb.cache
 CREATE TABLE IF NOT EXISTS `cache` (
@@ -107,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `cache` (
 -- Dumping data for table shopdb.cache: ~1 rows (approximately)
 DELETE FROM `cache`;
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-	('atiashop-cache-spatie.permission.cache', 'a:3:{s:5:"alias";a:4:{s:1:"a";s:2:"id";s:1:"b";s:4:"name";s:1:"c";s:10:"guard_name";s:1:"r";s:5:"roles";}s:11:"permissions";a:11:{i:0;a:4:{s:1:"a";i:1;s:1:"b";s:13:"view products";s:1:"c";s:3:"web";s:1:"r";a:3:{i:0;i:1;i:1;i:2;i:2;i:4;}}i:1;a:4:{s:1:"a";i:2;s:1:"b";s:15:"create products";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:2;a:4:{s:1:"a";i:3;s:1:"b";s:13:"edit products";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:3;a:4:{s:1:"a";i:4;s:1:"b";s:15:"delete products";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:4;a:4:{s:1:"a";i:5;s:1:"b";s:10:"view users";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:5;a:4:{s:1:"a";i:6;s:1:"b";s:12:"create users";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:6;a:4:{s:1:"a";i:7;s:1:"b";s:10:"edit users";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:7;a:4:{s:1:"a";i:8;s:1:"b";s:12:"delete users";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:8;a:4:{s:1:"a";i:9;s:1:"b";s:12:"view reports";s:1:"c";s:3:"web";s:1:"r";a:3:{i:0;i:1;i:1;i:2;i:2;i:3;}}i:9;a:4:{s:1:"a";i:10;s:1:"b";s:17:"manage accounting";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:3;}}i:10;a:4:{s:1:"a";i:11;s:1:"b";s:16:"manage inventory";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:4;}}}s:5:"roles";a:4:{i:0;a:3:{s:1:"a";i:1;s:1:"b";s:5:"admin";s:1:"c";s:3:"web";}i:1;a:3:{s:1:"a";i:2;s:1:"b";s:7:"manager";s:1:"c";s:3:"web";}i:2;a:3:{s:1:"a";i:4;s:1:"b";s:9:"warehouse";s:1:"c";s:3:"web";}i:3;a:3:{s:1:"a";i:3;s:1:"b";s:10:"accountant";s:1:"c";s:3:"web";}}}', 1780248516);
+	('atiashop-cache-spatie.permission.cache', 'a:3:{s:5:"alias";a:4:{s:1:"a";s:2:"id";s:1:"b";s:4:"name";s:1:"c";s:10:"guard_name";s:1:"r";s:5:"roles";}s:11:"permissions";a:11:{i:0;a:4:{s:1:"a";i:1;s:1:"b";s:13:"view products";s:1:"c";s:3:"web";s:1:"r";a:3:{i:0;i:1;i:1;i:2;i:2;i:4;}}i:1;a:4:{s:1:"a";i:2;s:1:"b";s:15:"create products";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:2;a:4:{s:1:"a";i:3;s:1:"b";s:13:"edit products";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:3;a:4:{s:1:"a";i:4;s:1:"b";s:15:"delete products";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:4;a:4:{s:1:"a";i:5;s:1:"b";s:10:"view users";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:5;a:4:{s:1:"a";i:6;s:1:"b";s:12:"create users";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:6;a:4:{s:1:"a";i:7;s:1:"b";s:10:"edit users";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:7;a:4:{s:1:"a";i:8;s:1:"b";s:12:"delete users";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:8;a:4:{s:1:"a";i:9;s:1:"b";s:12:"view reports";s:1:"c";s:3:"web";s:1:"r";a:3:{i:0;i:1;i:1;i:2;i:2;i:3;}}i:9;a:4:{s:1:"a";i:10;s:1:"b";s:17:"manage accounting";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:3;}}i:10;a:4:{s:1:"a";i:11;s:1:"b";s:16:"manage inventory";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:4;}}}s:5:"roles";a:4:{i:0;a:3:{s:1:"a";i:1;s:1:"b";s:5:"admin";s:1:"c";s:3:"web";}i:1;a:3:{s:1:"a";i:2;s:1:"b";s:7:"manager";s:1:"c";s:3:"web";}i:2;a:3:{s:1:"a";i:4;s:1:"b";s:9:"warehouse";s:1:"c";s:3:"web";}i:3;a:3:{s:1:"a";i:3;s:1:"b";s:10:"accountant";s:1:"c";s:3:"web";}}}', 1780434156);
 
 -- Dumping structure for table shopdb.cache_locks
 CREATE TABLE IF NOT EXISTS `cache_locks` (
@@ -132,19 +100,14 @@ CREATE TABLE IF NOT EXISTS `categories` (
   UNIQUE KEY `categories_code_parent_id_unique` (`code`,`parent_id`),
   KEY `categories_parent_id_foreign` (`parent_id`),
   CONSTRAINT `categories_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.categories: ~8 rows (approximately)
+-- Dumping data for table shopdb.categories: ~3 rows (approximately)
 DELETE FROM `categories`;
 INSERT INTO `categories` (`id`, `parent_id`, `name`, `code`, `created_at`, `updated_at`) VALUES
-	(1, NULL, 'آرایشی صورت', '01', '2026-02-22 18:24:39', '2026-02-22 18:24:39'),
-	(3, NULL, 'تست', '02', '2026-02-25 20:30:58', '2026-02-25 20:30:58'),
-	(4, 3, 'ست', '01', '2026-02-25 20:31:08', '2026-02-25 20:31:08'),
-	(5, 1, 'رژ گونه', '01', '2026-03-01 20:51:57', '2026-03-01 20:51:57'),
-	(6, NULL, 'تست واحد جدید', '03', '2026-03-02 14:52:32', '2026-03-02 14:52:32'),
-	(7, 6, 'زیر مجموعه 1', '01', '2026-03-02 14:52:51', '2026-03-02 14:52:51'),
-	(8, 6, 'زیر مجموعه 2', '02', '2026-03-02 14:52:59', '2026-03-02 14:52:59'),
-	(9, 6, 'زیر مجموعه 4', '03', '2026-03-02 14:53:05', '2026-03-02 14:53:05');
+	(1, NULL, 'رژ لب', '01', '2026-06-01 17:44:13', '2026-06-01 17:44:13'),
+	(2, 1, 'رژ لب مایع', '01', '2026-06-01 17:44:24', '2026-06-01 17:44:24'),
+	(3, 1, 'رژ لب جامد', '02', '2026-06-01 17:44:34', '2026-06-01 17:44:34');
 
 -- Dumping structure for table shopdb.customers
 CREATE TABLE IF NOT EXISTS `customers` (
@@ -222,6 +185,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `status` enum('pending','paid','partially_paid','overdue') NOT NULL DEFAULT 'paid',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `invoices_invoice_number_unique` (`invoice_number`),
   KEY `invoices_customer_id_foreign` (`customer_id`),
@@ -230,26 +194,10 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   CONSTRAINT `invoices_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `parties` (`id`) ON DELETE CASCADE,
   CONSTRAINT `invoices_parent_invoice_id_foreign` FOREIGN KEY (`parent_invoice_id`) REFERENCES `invoices` (`id`) ON DELETE SET NULL,
   CONSTRAINT `invoices_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.invoices: ~9 rows (approximately)
+-- Dumping data for table shopdb.invoices: ~0 rows (approximately)
 DELETE FROM `invoices`;
-INSERT INTO `invoices` (`id`, `invoice_type`, `parent_invoice_id`, `invoice_number`, `customer_id`, `receiver_name`, `delivery_method`, `address`, `phone`, `seller_name`, `project_code`, `subject`, `register_number`, `order_number`, `serial_number`, `user_id`, `total_amount`, `delivery_cost`, `discount_total`, `tax_rate`, `tax_amount`, `extra_charges_total`, `final_amount`, `payment_type`, `paid_amount`, `customer_debt`, `status`, `created_at`, `updated_at`) VALUES
-	(2, 'sales', NULL, 'INV-1778190418', 10, NULL, 'internal', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3483450.00, 0.00, 0.00, 10.00, 0.00, 0.00, 0.00, 'cash', 0.00, 0.00, 'paid', '2026-05-07 18:16:58', '2026-05-07 18:16:58'),
-	(3, 'sales', NULL, 'INV-1778190470', 10, NULL, 'internal', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 139393926.00, 0.00, 0.00, 10.00, 0.00, 0.00, 0.00, 'cash', 0.00, 0.00, 'paid', '2026-05-07 18:17:50', '2026-05-07 18:17:50'),
-	(4, 'sales', NULL, 'INV-1778190590', 10, NULL, 'internal', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 16.00, 0.00, 0.00, 10.00, 0.00, 0.00, 0.00, 'cash', 0.00, 0.00, 'paid', '2026-05-07 18:19:50', '2026-05-07 18:19:50'),
-	(5, 'sales', NULL, 'INV-1778240425', 10, NULL, 'internal', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 92929284.00, 0.00, 0.00, 10.00, 0.00, 0.00, 0.00, 'cash', 0.00, 0.00, 'paid', '2026-05-08 08:10:25', '2026-05-08 08:10:25'),
-	(6, 'sales', NULL, 'INV-1778240610', 10, NULL, 'internal', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 162904923.00, 0.00, 0.00, 10.00, 0.00, 0.00, 0.00, 'cash', 0.00, 0.00, 'paid', '2026-05-08 08:13:30', '2026-05-08 08:13:30'),
-	(10, 'sales', NULL, 'F-0502-101001', 10, NULL, 'shipping', 'تهران پردیس میدان عدالت', '09353580614', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 23223.00, 0.00, 0.00, 10.00, 2322.30, 0.00, 25545.30, 'cash', 25545.30, 0.00, 'paid', '2026-05-08 12:20:33', '2026-05-08 12:20:33'),
-	(11, 'sales', NULL, 'F-0502-101002', 10, NULL, 'pickup', 'تهران پردیس میدان عدالت', '09353580614', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 464646420.00, 0.00, 0.00, 10.00, 46464642.00, 0.00, 511111062.00, 'credit', 0.00, 0.00, 'pending', '2026-05-08 12:43:47', '2026-05-08 12:43:47'),
-	(12, 'sales', NULL, 'F-0502-101003', 10, NULL, 'internal', 'تهران پردیس میدان عدالت', '09353580614', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 232323210.00, 0.00, 0.00, 10.00, 23232321.00, 0.00, 255555531.00, 'cash', 255555531.00, 0.00, 'paid', '2026-05-08 13:02:50', '2026-05-08 13:02:50'),
-	(13, 'sales', NULL, 'F-0502-101004', 10, NULL, 'internal', 'تهران پردیس میدان عدالت', '09353580614', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 813131235.00, 0.00, 0.00, 0.00, 0.00, 0.00, 813131235.00, 'cash', 813131235.00, 0.00, 'paid', '2026-05-08 13:28:17', '2026-05-08 13:28:17'),
-	(14, 'sales', NULL, 'F-0502-101005', 10, NULL, 'internal', 'تهران پردیس میدان عدالت', '09353580614', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 10000000.00, 0.00, 0.00, 0.00, 0.00, 0.00, 10000000.00, 'credit', 0.00, 0.00, 'pending', '2026-05-08 13:29:30', '2026-05-08 13:29:30'),
-	(15, 'sales', NULL, 'F-0502-101006', 11, NULL, 'pickup', 'پردیس میدان عدالت فروردین شمالی', '09125418971', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 15.00, 0.00, 0.00, 0.00, 0.00, 0.00, 15.00, 'credit', 0.00, 0.00, 'pending', '2026-05-08 14:46:31', '2026-05-08 14:46:31'),
-	(16, 'sales', NULL, 'F-0502-101007', 11, NULL, 'internal', 'پردیس میدان عدالت فروردین شمالی', '09125418971', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 232323210.00, 0.00, 4646464.20, 0.00, 0.00, 1500000.00, 229176745.80, 'cash', 229176745.80, 0.00, 'paid', '2026-05-15 15:31:35', '2026-05-15 15:31:35'),
-	(17, 'sales', NULL, 'F-0502-101008', 10, NULL, 'internal', 'تهران پردیس میدان عدالت', '09353580614', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 60000.00, 0.00, 0.00, 0.00, 0.00, 2000.00, 62000.00, 'cash', 62000.00, 0.00, 'paid', '2026-05-20 16:52:24', '2026-05-20 16:52:24'),
-	(18, 'sales', NULL, 'F-0502-101009', 10, NULL, 'internal', 'تهران پردیس میدان عدالت', '09353580614', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 69150000.00, 0.00, 0.00, 0.00, 0.00, 50000.00, 69200000.00, 'cash', 69200000.00, 0.00, 'paid', '2026-05-20 17:39:34', '2026-05-20 17:39:34'),
-	(19, 'sales', NULL, 'F-0503-101001', 11, NULL, 'internal', 'پردیس میدان عدالت فروردین شمالی', '09125418971', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 162561.00, 0.00, 0.00, 0.00, 0.00, 0.00, 162561.00, 'cash', 162561.00, 0.00, 'paid', '2026-05-24 16:01:33', '2026-05-24 16:01:33');
 
 -- Dumping structure for table shopdb.invoice_items
 CREATE TABLE IF NOT EXISTS `invoice_items` (
@@ -275,28 +223,10 @@ CREATE TABLE IF NOT EXISTS `invoice_items` (
   KEY `invoice_items_product_id_foreign` (`product_id`),
   CONSTRAINT `invoice_items_invoice_id_foreign` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE,
   CONSTRAINT `invoice_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.invoice_items: ~12 rows (approximately)
+-- Dumping data for table shopdb.invoice_items: ~0 rows (approximately)
 DELETE FROM `invoice_items`;
-INSERT INTO `invoice_items` (`id`, `invoice_id`, `product_id`, `quantity`, `price`, `subtotal`, `discount_percent`, `discount_amount`, `tax_percent`, `tax_amount`, `packing_cost`, `extra_cost`, `staff_cost`, `stock_at_sale`, `unit_name`, `created_at`, `updated_at`) VALUES
-	(1, 2, 5, 150, 23223.00, 3483450.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, NULL, '2026-05-07 18:16:58', '2026-05-07 18:16:58'),
-	(2, 3, 6, 6, 23232321.00, 139393926.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, NULL, '2026-05-07 18:17:50', '2026-05-07 18:17:50'),
-	(3, 4, 4, 2, 8.00, 16.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, NULL, '2026-05-07 18:19:50', '2026-05-07 18:19:50'),
-	(4, 5, 6, 4, 23232321.00, 92929284.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, NULL, '2026-05-08 08:10:25', '2026-05-08 08:10:25'),
-	(5, 6, 6, 7, 23232321.00, 162626247.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, NULL, '2026-05-08 08:13:30', '2026-05-08 08:13:30'),
-	(6, 6, 5, 5, 23223.00, 116115.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, NULL, '2026-05-08 08:13:30', '2026-05-08 08:13:30'),
-	(7, 6, 5, 7, 23223.00, 162561.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, NULL, '2026-05-08 08:13:30', '2026-05-08 08:13:30'),
-	(13, 10, 5, 1, 23223.00, 23223.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 60, 'کیلوگرم', '2026-05-08 12:20:33', '2026-05-08 12:20:33'),
-	(14, 11, 6, 20, 23232321.00, 464646420.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 205, 'عدد', '2026-05-08 12:43:47', '2026-05-08 12:43:47'),
-	(15, 12, 6, 10, 23232321.00, 232323210.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 185, 'عدد', '2026-05-08 13:02:50', '2026-05-08 13:02:50'),
-	(16, 13, 6, 35, 23232321.00, 813131235.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 175, 'عدد', '2026-05-08 13:28:17', '2026-05-08 13:28:17'),
-	(17, 14, 7, 1, 10000000.00, 10000000.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 10, 'عدد', '2026-05-08 13:29:30', '2026-05-08 13:29:30'),
-	(18, 15, 2, 3, 5.00, 15.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 6, 'عدد', '2026-05-08 14:46:31', '2026-05-08 14:46:31'),
-	(19, 16, 6, 10, 23232321.00, 232323210.00, 0.00, 0.00, 0.00, 0.00, 1500000.00, 0.00, 0.00, 140, 'عدد', '2026-05-15 15:31:35', '2026-05-15 15:31:35'),
-	(20, 17, 4, 3, 20000.00, 60000.00, 0.00, 0.00, 0.00, 0.00, 2000.00, 0.00, 0.00, 3, 'عدد', '2026-05-20 16:52:24', '2026-05-20 16:52:24'),
-	(21, 18, 6, 30, 2305000.00, 69150000.00, 0.00, 0.00, 0.00, 0.00, 50000.00, 0.00, 0.00, 130, 'عدد', '2026-05-20 17:39:35', '2026-05-20 17:39:35'),
-	(22, 19, 5, 7, 23223.00, 162561.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 59, 'کیلوگرم', '2026-05-24 16:01:33', '2026-05-24 16:01:33');
 
 -- Dumping structure for table shopdb.jobs
 CREATE TABLE IF NOT EXISTS `jobs` (
@@ -331,6 +261,39 @@ CREATE TABLE IF NOT EXISTS `job_batches` (
 
 -- Dumping data for table shopdb.job_batches: ~0 rows (approximately)
 DELETE FROM `job_batches`;
+
+-- Dumping structure for table shopdb.journal_items
+CREATE TABLE IF NOT EXISTS `journal_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `journal_voucher_id` bigint(20) unsigned NOT NULL,
+  `account_id` bigint(20) unsigned NOT NULL,
+  `person_detailed_id` bigint(20) unsigned DEFAULT NULL,
+  `bank_cash_detailed_id` bigint(20) unsigned DEFAULT NULL,
+  `cost_center_detailed_id` bigint(20) unsigned DEFAULT NULL,
+  `project_detailed_id` bigint(20) unsigned DEFAULT NULL,
+  `debit` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `credit` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `row_description` varchar(500) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `journal_items_journal_voucher_id_foreign` (`journal_voucher_id`),
+  KEY `journal_items_person_detailed_id_foreign` (`person_detailed_id`),
+  KEY `journal_items_bank_cash_detailed_id_foreign` (`bank_cash_detailed_id`),
+  KEY `journal_items_cost_center_detailed_id_foreign` (`cost_center_detailed_id`),
+  KEY `journal_items_project_detailed_id_foreign` (`project_detailed_id`),
+  KEY `journal_items_account_id_person_detailed_id_index` (`account_id`,`person_detailed_id`),
+  KEY `journal_items_account_id_cost_center_detailed_id_index` (`account_id`,`cost_center_detailed_id`),
+  CONSTRAINT `journal_items_account_id_foreign` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`),
+  CONSTRAINT `journal_items_bank_cash_detailed_id_foreign` FOREIGN KEY (`bank_cash_detailed_id`) REFERENCES `detailed_accounts` (`id`),
+  CONSTRAINT `journal_items_cost_center_detailed_id_foreign` FOREIGN KEY (`cost_center_detailed_id`) REFERENCES `detailed_accounts` (`id`),
+  CONSTRAINT `journal_items_journal_voucher_id_foreign` FOREIGN KEY (`journal_voucher_id`) REFERENCES `journal_vouchers` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `journal_items_person_detailed_id_foreign` FOREIGN KEY (`person_detailed_id`) REFERENCES `detailed_accounts` (`id`),
+  CONSTRAINT `journal_items_project_detailed_id_foreign` FOREIGN KEY (`project_detailed_id`) REFERENCES `detailed_accounts` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table shopdb.journal_items: ~0 rows (approximately)
+DELETE FROM `journal_items`;
 
 -- Dumping structure for table shopdb.journal_vouchers
 CREATE TABLE IF NOT EXISTS `journal_vouchers` (
@@ -374,37 +337,37 @@ CREATE TABLE IF NOT EXISTS `menus` (
   PRIMARY KEY (`id`),
   KEY `menus_parent_id_foreign` (`parent_id`),
   CONSTRAINT `menus_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `menus` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shopdb.menus: ~26 rows (approximately)
 DELETE FROM `menus`;
 INSERT INTO `menus` (`id`, `title`, `route`, `icon`, `parent_id`, `order`, `permission`, `created_at`, `updated_at`) VALUES
-	(1, 'میز کار (داشبورد)', 'dashboard', 'fa-chart-line', NULL, 1, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(2, 'محصولات و خدمات', 'products', 'fa-box', NULL, 3, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(3, 'لیست محصولات', 'products.index', 'fa-list', 2, 1, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(4, 'دسته‌بندی‌ها', 'categories.index', 'fa-tags', 2, 2, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(5, 'تعاریف پایه', NULL, 'fa-cog', NULL, 10, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(6, 'مشتریان', 'parties.index', 'fa-users', NULL, 4, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(7, 'مدیریت کاربران', 'users.index', 'fa-user-lock', 15, 1, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(8, 'واحدهای کالا', 'units.index', 'fa-ruler', 5, 3, NULL, '2026-02-25 21:47:53', '2026-02-25 21:47:53'),
-	(9, 'ثبت فاکتور جدید', 'invoices.create', 'fa-file-invoice', 11, 1, NULL, '2026-05-07 18:16:39', '2026-05-07 18:16:39'),
-	(10, 'لیست فاکتورها', 'invoices.index', 'fa-list', 11, 2, NULL, '2026-05-08 07:37:27', NULL),
-	(11, 'فاکتورها', NULL, 'fa-receipt', NULL, 2, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(12, 'افزودن محصول جدید', NULL, 'fa-plus-circle', 2, 6, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(13, 'ورود از اکسل', NULL, 'fa-file-import', 2, 7, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(14, 'کارکرد کالا', NULL, 'fa-chart-line', 2, 8, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(15, 'هزینه‌ها', NULL, 'fa-money-bill', 25, 8, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(16, 'درآمدها', NULL, 'fa-chart-line', 25, 9, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(17, 'چک‌ها', NULL, 'fa-money-check', 25, 3, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(18, 'حساب‌ها', NULL, 'fa-building-columns', 25, 4, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(19, 'سود و زیان', NULL, 'fa-chart-line', 25, 1, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(20, 'گزارش محصولات', NULL, 'fa-chart-bar', 25, 2, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(21, 'تنظیمات فروشگاه', 'settings.general', 'fa-store', 38, 1, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(22, 'کارت‌های داشبورد', NULL, 'fa-th', 38, 2, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(23, 'پشتیبان‌گیری', NULL, 'fa-database', 38, 3, NULL, '2026-05-12 20:20:25', '2026-05-12 20:20:25'),
-	(24, 'نقش‌ها و مجوزها', NULL, 'fa-lock', 38, 2, NULL, '2026-05-12 20:20:26', '2026-05-12 20:20:26'),
+	(1, 'میز کار (داشبورد)', 'dashboard', 'fa-chart-line', NULL, 1, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(2, 'محصولات و خدمات', 'products', 'fa-box', NULL, 3, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(3, 'لیست محصولات', 'products.index', 'fa-list', 2, 1, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(4, 'دسته‌بندی‌ها', 'categories.index', 'fa-tags', 2, 2, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(5, 'تعاریف پایه', NULL, 'fa-cog', NULL, 10, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(6, 'مشتریان', 'parties.index', 'fa-users', NULL, 4, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(7, 'مدیریت کاربران', 'users.index', 'fa-user-lock', 15, 1, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(8, 'واحدهای کالا', 'units.index', 'fa-ruler', 5, 3, NULL, '2026-02-25 18:17:53', '2026-02-25 18:17:53'),
+	(9, 'ثبت فاکتور جدید', 'invoices.create', 'fa-file-invoice', 11, 1, NULL, '2026-05-07 14:46:39', '2026-05-07 14:46:39'),
+	(10, 'لیست فاکتورها', 'invoices.index', 'fa-list', 11, 2, NULL, '2026-05-08 04:07:27', NULL),
+	(11, 'فاکتورها', NULL, 'fa-receipt', NULL, 2, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(12, 'افزودن محصول جدید', NULL, 'fa-plus-circle', 2, 6, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(13, 'ورود از اکسل', NULL, 'fa-file-import', 2, 7, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(14, 'کارکرد کالا', NULL, 'fa-chart-line', 2, 8, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(15, 'هزینه‌ها', NULL, 'fa-money-bill', 25, 8, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(16, 'درآمدها', NULL, 'fa-chart-line', 25, 9, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(17, 'چک‌ها', NULL, 'fa-money-check', 25, 3, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(18, 'حساب‌ها', NULL, 'fa-building-columns', 25, 4, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(19, 'سود و زیان', NULL, 'fa-chart-line', 25, 1, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(20, 'گزارش محصولات', NULL, 'fa-chart-bar', 25, 2, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(21, 'تنظیمات فروشگاه', 'settings.general', 'fa-store', 38, 1, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(22, 'کارت‌های داشبورد', NULL, 'fa-th', 38, 2, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(23, 'پشتیبان‌گیری', NULL, 'fa-database', 38, 3, NULL, '2026-05-12 16:50:25', '2026-05-12 16:50:25'),
+	(24, 'نقش‌ها و مجوزها', NULL, 'fa-lock', 38, 2, NULL, '2026-05-12 16:50:26', '2026-05-12 16:50:26'),
 	(25, 'گزارشات', NULL, 'fa-chart-line', NULL, 5, NULL, NULL, NULL),
-	(38, 'تنظیمات', NULL, 'fa-gear', NULL, 7, NULL, '2026-05-15 20:11:12', '2026-05-15 20:11:12');
+	(38, 'تنظیمات', NULL, 'fa-gear', NULL, 7, NULL, '2026-05-15 16:41:12', '2026-05-15 16:41:12');
 
 -- Dumping structure for table shopdb.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
@@ -412,9 +375,9 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.migrations: ~35 rows (approximately)
+-- Dumping data for table shopdb.migrations: ~37 rows (approximately)
 DELETE FROM `migrations`;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '0001_01_01_000000_create_users_table', 1),
@@ -426,34 +389,34 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(7, '0001_01_01_000006_create_invoices_table', 1),
 	(8, '0001_01_01_000007_create_invoice_items_table', 1),
 	(9, '2026_02_19_213852_create_permission_tables', 1),
-	(10, '2026_02_20_151317_create_activity_log_table', 1),
-	(11, '2026_02_20_151318_add_event_column_to_activity_log_table', 1),
-	(12, '2026_02_20_151319_add_batch_uuid_column_to_activity_log_table', 1),
-	(13, '2026_02_20_151930_create_transactions_table', 1),
-	(14, '2026_02_22_151235_create_stock_movements_table', 1),
-	(15, '2026_02_22_153639_add_parent_id_to_categories_table', 1),
-	(16, '2026_02_22_160826_modify_categories_and_products_table', 1),
-	(17, '2026_02_22_180515_fix_categories_code_unique', 1),
-	(18, '2026_02_22_193629_create_accounts_table', 1),
-	(19, '2026_02_22_193713_create_parties_table', 1),
-	(20, '2026_02_24_151930_create_transactions_table', 2),
-	(21, '2026_02_26_003115_create_menus_table', 3),
-	(22, '2026_02_26_010244_create_units_table', 4),
-	(23, '2026_02_27_212901_add_symbol_to_units_table', 5),
-	(24, '2026_05_07_210837_add_invoice_menu_item_to_menus_table', 6),
-	(25, '2026_05_07_214523_fix_invoices_foreign_key_to_parties', 6),
-	(26, '2026_05_08_000000_add_user_id_to_invoices_table', 6),
-	(27, '2026_05_08_110608_add_invoices_list_to_menus_table', 7),
-	(28, '2026_05_08_142029_add_advanced_fields_to_invoices_table', 8),
-	(29, '2026_05_08_142110_add_advanced_fields_to_invoice_items_table', 8),
-	(30, '2026_05_08_144128_add_payment_fields_to_invoices_table', 9),
-	(31, '2026_05_12_200043_update_menu_icons_to_fontawesome', 10),
-	(33, '2026_05_15_200522_create_settings_table', 11),
-	(38, '2026_05_30_163636_create_accounts_table', 12),
-	(39, '2026_05_30_163639_create_detailed_accounts_table', 12),
-	(40, '2026_05_30_163641_create_teams_table', 13),
-	(41, '2026_05_30_165119_create_journal_vouchers_table', 14),
-	(42, '2026_05_30_165121_create_journal_items_table', 14);
+	(10, '2026_02_22_151235_create_stock_movements_table', 1),
+	(11, '2026_02_22_153639_add_parent_id_to_categories_table', 1),
+	(12, '2026_02_22_160826_modify_categories_and_products_table', 1),
+	(13, '2026_02_22_180515_fix_categories_code_unique', 1),
+	(14, '2026_02_22_193629_create_accounts_table', 1),
+	(15, '2026_02_22_193713_create_parties_table', 1),
+	(16, '2026_02_22_194000_create_transactions_table', 1),
+	(17, '2026_02_26_003115_create_menus_table', 1),
+	(18, '2026_02_26_010244_create_units_table', 1),
+	(19, '2026_02_27_212901_add_symbol_to_units_table', 1),
+	(20, '2026_03_02_085922_add_unit_id_to_products_table', 1),
+	(21, '2026_05_07_210837_add_invoice_menu_item_to_menus_table', 1),
+	(22, '2026_05_07_214523_fix_invoices_foreign_key_to_parties', 1),
+	(23, '2026_05_08_000000_add_user_id_to_invoices_table', 1),
+	(24, '2026_05_08_110608_add_invoices_list_to_menus_table', 1),
+	(25, '2026_05_08_142029_add_advanced_fields_to_invoices_table', 1),
+	(26, '2026_05_08_142110_add_advanced_fields_to_invoice_items_table', 1),
+	(27, '2026_05_08_144128_add_payment_fields_to_invoices_table', 1),
+	(28, '2026_05_12_200043_update_menu_icons_to_fontawesome', 1),
+	(29, '2026_05_15_200522_create_settings_table', 1),
+	(30, '2026_05_30_163639_create_detailed_accounts_table', 1),
+	(31, '2026_05_30_163641_create_teams_table', 1),
+	(32, '2026_05_30_165119_create_journal_vouchers_table', 1),
+	(33, '2026_05_30_165121_create_journal_items_table', 1),
+	(34, '2026_06_01_182346_create_activity_log_table', 1),
+	(35, '2026_06_01_182347_add_event_column_to_activity_log_table', 1),
+	(36, '2026_06_01_182348_add_batch_uuid_column_to_activity_log_table', 1),
+	(37, '2026_06_01_182536_add_deleted_at_to_invoices_table', 1);
 
 -- Dumping structure for table shopdb.model_has_permissions
 CREATE TABLE IF NOT EXISTS `model_has_permissions` (
@@ -478,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `model_has_roles` (
   CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.model_has_roles: ~0 rows (approximately)
+-- Dumping data for table shopdb.model_has_roles: ~1 rows (approximately)
 DELETE FROM `model_has_roles`;
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 	(1, 'App\\Models\\User', 1);
@@ -503,14 +466,12 @@ CREATE TABLE IF NOT EXISTS `parties` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `parties_code_unique` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shopdb.parties: ~1 rows (approximately)
 DELETE FROM `parties`;
 INSERT INTO `parties` (`id`, `code`, `type`, `first_name`, `last_name`, `name`, `national_code`, `mobile`, `phone`, `address`, `is_customer`, `is_supplier`, `is_employee`, `status`, `created_at`, `updated_at`) VALUES
-	(9, '0007', 'real', 'احسان', 'دهقانی سانیج', 'مدیریت (احسان)', '4420624175', '09140911941', NULL, 'پردیس ، میدان عدالت', 0, 0, 1, 1, '2026-03-01 19:31:15', '2026-03-01 20:47:06'),
-	(10, '0008', 'real', 'عاطفه', 'امینی', 'عاطفه (مدیریت2)', '0441023789', '09353580614', NULL, 'تهران پردیس میدان عدالت', 1, 0, 1, 1, '2026-03-02 04:46:07', '2026-03-02 04:46:07'),
-	(11, '0009', 'real', 'معصومه', 'امینی', 'عمه معصومه', '0000000000', '09125418971', NULL, 'پردیس میدان عدالت فروردین شمالی', 1, 0, 0, 1, '2026-05-08 14:32:01', '2026-05-08 14:32:01');
+	(1, '0001', 'real', 'معصومه', 'امینی', 'عمه معصومه', '', '09385247621', '09385247621', 'تهران پردیس فروردین شمالی', 1, 0, 0, 1, '2026-06-01 17:46:58', '2026-06-01 17:47:04');
 
 -- Dumping structure for table shopdb.password_reset_tokens
 CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
@@ -537,17 +498,17 @@ CREATE TABLE IF NOT EXISTS `permissions` (
 -- Dumping data for table shopdb.permissions: ~11 rows (approximately)
 DELETE FROM `permissions`;
 INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-	(1, 'view products', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(2, 'create products', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(3, 'edit products', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(4, 'delete products', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(5, 'view users', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(6, 'create users', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(7, 'edit users', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(8, 'delete users', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(9, 'view reports', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(10, 'manage accounting', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(11, 'manage inventory', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28');
+	(1, 'view products', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(2, 'create products', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(3, 'edit products', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(4, 'delete products', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(5, 'view users', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(6, 'create users', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(7, 'edit users', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(8, 'delete users', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(9, 'view reports', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(10, 'manage accounting', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(11, 'manage inventory', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54');
 
 -- Dumping structure for table shopdb.products
 CREATE TABLE IF NOT EXISTS `products` (
@@ -558,6 +519,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `purchase_price` decimal(15,2) NOT NULL,
   `sale_price` decimal(15,2) NOT NULL,
   `stock` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'وضعیت فعال یا غیرفعال بودن کالا برای فروش',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `unit_id` bigint(20) unsigned NOT NULL,
@@ -565,17 +527,15 @@ CREATE TABLE IF NOT EXISTS `products` (
   UNIQUE KEY `products_sku_unique` (`sku`),
   KEY `products_category_id_foreign` (`category_id`),
   KEY `products_sku_index` (`sku`),
-  CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `products_unit_id_foreign` (`unit_id`),
+  CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `products_unit_id_foreign` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.products: ~2 rows (approximately)
+-- Dumping data for table shopdb.products: ~1 rows (approximately)
 DELETE FROM `products`;
-INSERT INTO `products` (`id`, `category_id`, `name`, `sku`, `purchase_price`, `sale_price`, `stock`, `created_at`, `updated_at`, `unit_id`) VALUES
-	(2, 4, 'بسببب', '020100001', 4.00, 5.00, 3, '2026-02-25 20:59:17', '2026-05-08 14:46:31', 3),
-	(4, 5, 'jkkjj', '010100001', 11.00, 8.00, 0, '2026-03-02 05:47:25', '2026-05-20 16:52:24', 3),
-	(5, 4, 'hkasd', '020100002', 23232.00, 23223.00, 52, '2026-03-02 15:06:59', '2026-05-24 16:01:33', 4),
-	(6, 4, 'تست تستس', '020100003', 2323232.00, 23232321.00, 100, '2026-03-04 05:31:37', '2026-05-20 17:39:35', 3),
-	(7, 9, 'تست زیر مجموعه 4', '030300001', 4333333.00, 87777777.00, 9, '2026-05-07 08:49:29', '2026-05-08 13:29:30', 3);
+INSERT INTO `products` (`id`, `category_id`, `name`, `sku`, `purchase_price`, `sale_price`, `stock`, `is_active`, `created_at`, `updated_at`, `unit_id`) VALUES
+	(1, 2, 'رژ لب مایع ویولت قرمز 02', '010100001', 30000.00, 45000.00, 5, 1, '2026-06-01 17:45:20', '2026-06-01 17:45:20', 1);
 
 -- Dumping structure for table shopdb.roles
 CREATE TABLE IF NOT EXISTS `roles` (
@@ -591,10 +551,10 @@ CREATE TABLE IF NOT EXISTS `roles` (
 -- Dumping data for table shopdb.roles: ~4 rows (approximately)
 DELETE FROM `roles`;
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-	(1, 'admin', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(2, 'manager', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(3, 'accountant', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28'),
-	(4, 'warehouse', 'web', '2026-02-22 18:22:28', '2026-02-22 18:22:28');
+	(1, 'admin', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(2, 'manager', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(3, 'accountant', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54'),
+	(4, 'warehouse', 'web', '2026-06-01 17:05:54', '2026-06-01 17:05:54');
 
 -- Dumping structure for table shopdb.role_has_permissions
 CREATE TABLE IF NOT EXISTS `role_has_permissions` (
@@ -643,12 +603,10 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.sessions: ~2 rows (approximately)
+-- Dumping data for table shopdb.sessions: ~1 rows (approximately)
 DELETE FROM `sessions`;
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-	('8Aj1b808fZPevoGAIfGAVanDul8k44SIiRmJxiGw', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiVWJHVjlVOXdmNVNzczdvWjY3cjdxZFZTZ2kybmhwZkp0aXN1bGpmaCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjI5OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvcHJvZmlsZSI7czo1OiJyb3V0ZSI7czoxMjoicHJvZmlsZS5lZGl0Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1780163553),
-	('oiYSS1SAeTy1gpDWiDgYudmM74Cs38qvkb06sv6T', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiaUVwdmFUZzVzREpVSDNtcjFwdmV1clVqTGQxOG9sd3pZM0tlZlA2NSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9pbnZvaWNlcy9jcmVhdGUiO3M6NToicm91dGUiO3M6MTU6Imludm9pY2VzLmNyZWF0ZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MzoidXJsIjthOjA6e31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1779468988),
-	('UP6BTlrROYPH0eTIp3jcdGzhErABT3MEwyiOh4if', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWlc4WDByOU1qSWU3RDl1M2tHYzNxQWlZeWh5dEN0Ymh3RHVJTkNYVyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjMxOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvZGFzaGJvYXJkIjtzOjU6InJvdXRlIjtzOjk6ImRhc2hib2FyZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1779651196);
+	('Qi4NiEg4bvMxZmdQ3NyThGwUDHZJnwnAvIh9r5gg', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiSDIwdE9DTnRyc0lBVHhVU1U3TTRhcFFxTTJNZW9jUGJjM1BwUE91bCI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9pbnZvaWNlcy9jcmVhdGUiO3M6NToicm91dGUiO3M6MTU6Imludm9pY2VzLmNyZWF0ZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MzoidXJsIjthOjA6e31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1780349939);
 
 -- Dumping structure for table shopdb.settings
 CREATE TABLE IF NOT EXISTS `settings` (
@@ -661,10 +619,25 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `settings_key_unique` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.settings: ~0 rows (approximately)
+-- Dumping data for table shopdb.settings: ~14 rows (approximately)
 DELETE FROM `settings`;
+INSERT INTO `settings` (`id`, `key`, `value`, `type`, `group`, `created_at`, `updated_at`) VALUES
+	(1, 'shop_name', 'عاطیا شاپ', 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:43'),
+	(2, 'shop_address', 'تهران', 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:43'),
+	(3, 'shop_phone', '09106957891', 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:43'),
+	(4, 'shop_register_number', '2321', 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:43'),
+	(5, 'shop_economic_code', '---', 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:43'),
+	(6, 'currency', 'تومان', 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:43'),
+	(7, 'tax_enabled', '0', 'boolean', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:51'),
+	(8, 'tax_rate', '10', 'number', 'general', '2026-06-01 17:38:33', '2026-06-01 17:38:33'),
+	(9, 'discount_enabled', '1', 'boolean', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:51'),
+	(10, 'invoice_footer_text', NULL, 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:38:33'),
+	(11, 'invoice_print_size', 'A4', 'text', 'general', '2026-06-01 17:38:33', '2026-06-01 17:38:33'),
+	(12, 'invoice_show_logo', '0', 'boolean', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:51'),
+	(13, 'invoice_show_stamp', '0', 'boolean', 'general', '2026-06-01 17:38:33', '2026-06-01 17:42:51'),
+	(14, 'dashboard_cards', '["total_sales","debts","total_purchases","receivables","proformas","total_expenses"]', 'json', 'general', '2026-06-01 17:42:07', '2026-06-01 17:42:07');
 
 -- Dumping structure for table shopdb.stock_movements
 CREATE TABLE IF NOT EXISTS `stock_movements` (
@@ -678,25 +651,10 @@ CREATE TABLE IF NOT EXISTS `stock_movements` (
   PRIMARY KEY (`id`),
   KEY `stock_movements_product_id_foreign` (`product_id`),
   CONSTRAINT `stock_movements_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.stock_movements: ~9 rows (approximately)
+-- Dumping data for table shopdb.stock_movements: ~0 rows (approximately)
 DELETE FROM `stock_movements`;
-INSERT INTO `stock_movements` (`id`, `product_id`, `type`, `quantity`, `reference`, `created_at`, `updated_at`) VALUES
-	(2, 4, 'out', 2, 'invoice_id:4', '2026-05-07 18:19:50', '2026-05-07 18:19:50'),
-	(5, 5, 'out', 1, 'invoice_id:9', '2026-05-08 12:09:11', '2026-05-08 12:09:11'),
-	(6, 2, 'out', 1, 'invoice_id:9', '2026-05-08 12:09:11', '2026-05-08 12:09:11'),
-	(7, 2, 'out', 1, 'invoice_id:9', '2026-05-08 12:09:11', '2026-05-08 12:09:11'),
-	(8, 5, 'out', 1, 'invoice_id:10', '2026-05-08 12:20:33', '2026-05-08 12:20:33'),
-	(9, 6, 'out', 20, 'invoice_id:11', '2026-05-08 12:43:47', '2026-05-08 12:43:47'),
-	(10, 6, 'out', 10, 'invoice_id:12', '2026-05-08 13:02:50', '2026-05-08 13:02:50'),
-	(11, 6, 'out', 35, 'invoice_id:13', '2026-05-08 13:28:17', '2026-05-08 13:28:17'),
-	(12, 7, 'out', 1, 'invoice_id:14', '2026-05-08 13:29:30', '2026-05-08 13:29:30'),
-	(13, 2, 'out', 3, 'invoice_id:15', '2026-05-08 14:46:31', '2026-05-08 14:46:31'),
-	(14, 6, 'out', 10, 'invoice_id:16', '2026-05-15 15:31:36', '2026-05-15 15:31:36'),
-	(15, 4, 'out', 3, 'invoice_id:17', '2026-05-20 16:52:24', '2026-05-20 16:52:24'),
-	(16, 6, 'out', 30, 'invoice_id:18', '2026-05-20 17:39:35', '2026-05-20 17:39:35'),
-	(17, 5, 'out', 7, 'invoice_id:19', '2026-05-24 16:01:33', '2026-05-24 16:01:33');
 
 -- Dumping structure for table shopdb.teams
 CREATE TABLE IF NOT EXISTS `teams` (
@@ -717,32 +675,19 @@ DELETE FROM `teams`;
 -- Dumping structure for table shopdb.transactions
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `party_id` bigint(20) unsigned NOT NULL,
-  `amount` decimal(15,0) NOT NULL,
-  `type` enum('sale','purchase','expense','income') NOT NULL,
-  `bank_account` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `account_id` bigint(20) unsigned NOT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `type` enum('debit','credit') NOT NULL COMMENT 'نوع تراکنش: بدهکار (debit) یا بستانکار (credit)',
+  `description` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `transactions_party_id_foreign` (`party_id`),
-  CONSTRAINT `transactions_party_id_foreign` FOREIGN KEY (`party_id`) REFERENCES `parties` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `transactions_account_id_foreign` (`account_id`),
+  CONSTRAINT `transactions_account_id_foreign` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.transactions: ~10 rows (approximately)
+-- Dumping data for table shopdb.transactions: ~0 rows (approximately)
 DELETE FROM `transactions`;
-INSERT INTO `transactions` (`id`, `party_id`, `amount`, `type`, `bank_account`, `description`, `created_at`, `updated_at`) VALUES
-	(1, 10, 51096, 'sale', NULL, 'فاکتور شماره F-0502-101001', '2026-05-08 12:09:11', '2026-05-08 12:09:11'),
-	(2, 10, 25545, 'sale', NULL, 'فاکتور شماره F-0502-101001', '2026-05-08 12:20:33', '2026-05-08 12:20:33'),
-	(3, 10, 511111062, 'sale', NULL, 'فاکتور شماره F-0502-101002', '2026-05-08 12:43:47', '2026-05-08 12:43:47'),
-	(4, 10, 255555531, 'sale', NULL, 'فاکتور شماره F-0502-101003', '2026-05-08 13:02:50', '2026-05-08 13:02:50'),
-	(5, 10, 813131235, 'sale', NULL, 'فاکتور شماره F-0502-101004', '2026-05-08 13:28:17', '2026-05-08 13:28:17'),
-	(6, 10, 10000000, 'sale', NULL, 'فاکتور شماره F-0502-101005', '2026-05-08 13:29:30', '2026-05-08 13:29:30'),
-	(7, 11, 15, 'sale', NULL, 'فاکتور شماره F-0502-101006', '2026-05-08 14:46:31', '2026-05-08 14:46:31'),
-	(8, 11, 229176746, 'sale', NULL, 'فاکتور شماره F-0502-101007', '2026-05-15 15:31:36', '2026-05-15 15:31:36'),
-	(9, 10, 62000, 'sale', NULL, 'فاکتور شماره F-0502-101008', '2026-05-20 16:52:24', '2026-05-20 16:52:24'),
-	(10, 10, 69200000, 'sale', NULL, 'فاکتور شماره F-0502-101009', '2026-05-20 17:39:35', '2026-05-20 17:39:35'),
-	(11, 11, 162561, 'sale', NULL, 'فاکتور شماره F-0503-101001', '2026-05-24 16:01:33', '2026-05-24 16:01:33');
 
 -- Dumping structure for table shopdb.units
 CREATE TABLE IF NOT EXISTS `units` (
@@ -752,13 +697,12 @@ CREATE TABLE IF NOT EXISTS `units` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.units: ~2 rows (approximately)
+-- Dumping data for table shopdb.units: ~1 rows (approximately)
 DELETE FROM `units`;
 INSERT INTO `units` (`id`, `title`, `symbol`, `created_at`, `updated_at`) VALUES
-	(3, 'عدد', 'عدد', '2026-02-27 18:36:44', '2026-02-27 18:36:44'),
-	(4, 'کیلوگرم', 'KG', '2026-03-02 06:25:03', '2026-03-02 06:25:03');
+	(1, 'عدد', 'PCS', '2026-06-01 17:43:22', '2026-06-01 17:43:22');
 
 -- Dumping structure for table shopdb.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -774,10 +718,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shopdb.users: ~0 rows (approximately)
+-- Dumping data for table shopdb.users: ~1 rows (approximately)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'احسان دهقانی', 'edsanig@gmail.com', NULL, '$2y$12$eF6.kf6J/PAmx3N1lj1aE.Djmmk4K5Zw4cdl8lSIGsymk1c6gUB.e', 'lPzeppv55LRxau0JYH1d1LqApb90KUShLcaVOolotilXBcqUZH7oQiNSDdi3', '2026-02-22 18:22:28', '2026-05-15 15:36:32');
+	(1, 'مدیر سیستم', 'edsanig@gmail.com', NULL, '$2y$12$YlbIO6wS/.UEqCMTE5pMTeit0cyBw0jgtsAZaCYpDx/YAHJ.PqBqC', NULL, '2026-06-01 17:05:55', '2026-06-01 17:05:55');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
