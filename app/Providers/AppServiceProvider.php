@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        view()->share('sidebarMenus', \App\Models\Menu::whereNull('parent_id')->with('children')->orderBy('order')->get());
+        //view()->share('sidebarMenus', \App\Models\Menu::whereNull('parent_id')->with('children')->orderBy('order')->get());
+		
+		if (!app()->runningInConsole() && \Illuminate\Support\Facades\Schema::hasTable('menus')) {
+        $menus = \App\Models\Menu::whereNull('parent_id')->orderBy('order', 'asc')->get();
+        view()->share('menus', $menus);
+    }
     }
 }

@@ -2,10 +2,29 @@
 
 namespace App\Models;
 
+use App\Enums\InvoiceType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
 
 class Invoice extends Model
 {
+    use LogsActivity; // اضافه کردن این ویژگی
+	use LogsActivity, SoftDeletes;
+
+    // تعیین تنظیمات لاگ‌گیری
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['invoice_number', 'status', 'total_amount', 'payment_type']) // فیلدهایی که حساس هستند
+            ->logOnlyDirty() // فقط تغییرات را ذخیره کن (نه کل آبجکت)
+            ->dontSubmitEmptyLogs();
+    }
+	
     protected $fillable = [
         'invoice_number',
         'customer_id',
@@ -77,4 +96,11 @@ class Invoice extends Model
         }
         $this->saveQuietly();
     }
+	
+	public function up()
+{
+    Schema::table('invoices', function (Blueprint $table) {
+        $table->softDeletes(); // ایجاد ستون deleted_at
+    });
+}
 }
